@@ -50,13 +50,6 @@ def serve(sock, func):
         (clientsocket, address) = sock.accept()
         _thread.start_new_thread(func, (clientsocket,))
 
-
-CAT = """
-     ^ ^
-   =(   )=
-   """
-
-
 def respond(sock):
     """
     Respond (only) to GET
@@ -68,9 +61,12 @@ def respond(sock):
     print("\nRequest was {}\n".format(request))
 
     parts = request.split()
-    if len(parts) > 1 and parts[0] == "GET":
+    if len(parts) > 1 and parts[0] == "GET" and (parts[1].endswith(".html") or
+          parts[1].endswith(".css")):
+        path = parts[1].lstrip("/")
         transmit("HTTP/1.0 200 OK\n\n", sock)
-        transmit(CAT, sock)
+        transmit(open(path).read(), sock)
+
     else:
         transmit("\nI don't handle this request: {}\n".format(request), sock)
 
