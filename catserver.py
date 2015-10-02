@@ -49,6 +49,7 @@ def serve(sock, func):
     while True:
         print("Attempting to accept a connection on {}".format(sock))
         (clientsocket, address) = sock.accept()
+        print("sock")
         _thread.start_new_thread(func, (clientsocket,))
 
 
