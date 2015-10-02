@@ -60,7 +60,7 @@ def respond(sock):
 
     parts = request.split()
     if len(parts) > 1 and parts[0] == "GET" and (parts[1].endswith(".html") or
-          parts[1].endswith(".css")):
+            parts[1].endswith(".css")):
         path = parts[1].lstrip("/")
         transmit("HTTP/1.0 200 OK\n\n", sock)
 
