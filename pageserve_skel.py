@@ -6,15 +6,13 @@ Socket programming in Python
   This trivial implementation is not robust:  We have omitted decent
   error handling and many other things to keep the illustration as simple
   as possible. 
-
-  FIXME:
-  Currently this program always serves an ascii graphic of a cat.
-  Change it to serve files if they end with .html and are in the current directory
 """
 
 import socket    # Basic TCP/IP communication on the internet
 import random    # To pick a port at random, giving us some chance to pick a port not in use
 import _thread   # Response computation runs concurrently with main program 
+import os.path   # To check if file exists in directory
+
 
 
 def listen(portnum):
@@ -65,8 +63,14 @@ def respond(sock):
           parts[1].endswith(".css")):
         path = parts[1].lstrip("/")
         transmit("HTTP/1.0 200 OK\n\n", sock)
-        transmit(open(path).read(), sock)
 
+        if os.path.isfile(path):
+          transmit(open(path).read(), sock)
+
+        else:
+          path = "404.html"
+          transmit(open(path).read(), sock)
+          
     else:
         transmit("\nI don't handle this request: {}\n".format(request), sock)
 
